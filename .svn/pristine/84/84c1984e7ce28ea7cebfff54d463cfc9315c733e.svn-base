@@ -1,0 +1,78 @@
+package com.itqf.lvyou.controller;
+
+import java.util.Map;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import com.itqf.lvyou.WoException;
+import com.itqf.lvyou.service.AuthenticationService;
+import com.itqf.lvyou.service.MenuService;
+
+@Controller
+@RequestMapping("/")
+public class HomeController {
+	
+	@Resource
+	private AuthenticationService authenticationService;
+	
+	@Resource
+	private MenuService menuService;        
+	
+	private final static String VIEW_LOGIN = "login";
+	
+	private final static String VIEW_MAIN = "main";
+	
+	private final static Logger LOG = LogManager.getLogger(HomeController.class);
+	//   /index
+	@RequestMapping("/index")
+	public ModelAndView goHome(String currentTopId,String currentSubId,HttpServletRequest req,HttpServletResponse resp) {
+		//在springMVC.xml中配置的视图解析器中，定义了前缀和后缀，和下面的名字一起组成.jsp的全路径地址
+		ModelAndView mav = new ModelAndView();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> userData = (Map<String, Object>) req.getSession().getAttribute("userData");
+		if (userData == null) {
+			mav.setViewName(VIEW_LOGIN);
+			return mav;
+		}
+		mav.setViewName(VIEW_MAIN);
+		Map<String,Object> menuData = menuService.getMenuData(userData.get("role").toString(), currentTopId, currentSubId);
+		mav.addAllObjects(menuData);
+		return mav;
+	}
+	
+	@RequestMapping("/authenticate")
+	public ModelAndView authenticate(String currentTopId,String currentSubId,String user,String password,HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		try {
+			// 验证用户名和密码，并返回用户对象
+			Map<String, Object> userData = authenticationService.authenticate(user, password);
+			mav.addAllObjects(userData);
+			mav.setViewName(VIEW_MAIN);
+			// 获取菜单数据
+			Map<String,Object> menuData = menuService.getMenuData(userData.get("role").toString(), null, null);
+			mav.addAllObjects(menuData);
+			// 将用户设置到session中
+			req.getSession().setAttribute("userData", userData);
+			// mav.addAllObjects等价于下面的方法：循环遍历集合，在单个加入
+			return mav;
+		}catch (WoException e) {
+			//打印异常的协议栈
+			LOG.error(e.getMessage(), e);
+			// 设置异常消息
+			mav.addObject("error",e.getMessage());
+			mav.setViewName(VIEW_LOGIN);
+			return mav;
+		}catch (Exception e) {
+			//打印异常的协议栈
+			LOG.error(e.getMessage(), e);
+			mav.addObject("error", "登录失败！");
+			mav.setViewName(VIEW_LOGIN);
+			return mav;
+		}
+	}
+}

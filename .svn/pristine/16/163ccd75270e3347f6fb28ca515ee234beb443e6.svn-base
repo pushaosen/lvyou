@@ -1,0 +1,18 @@
+package com.itqf.lvyou.service;
+
+import com.itqf.lvyou.model.User;
+
+/**
+ * @author Administrator
+ *
+ */
+public interface AuthenticationService {
+
+	/**
+	 * @param user
+	 * @param password
+	 * @return
+	 */
+	public abstract User authenticate(String user,String password);
+	
+}

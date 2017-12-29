@@ -1,0 +1,105 @@
+﻿﻿<%@ page language="java" pageEncoding="utf-8"%>
+<%@ page import="com.itqf.lvyou.model.Menu"%>
+<%@ page import="com.itqf.lvyou.model.User"%>
+<%@ page import="java.util.List"%>
+<%
+	String basePath = request.getScheme() + "://" + request.getServerName() + 
+			":" + request.getServerPort() + request.getContextPath() + "/";
+	List<Menu> topMenus = (List<Menu>)request.getAttribute ("topMenus");
+	List<Menu> subMenus = (List<Menu>)request.getAttribute ("subMenus");
+	Menu currentTopMenu = (Menu)request.getAttribute ("currentTopMenu");
+	Menu currentSubMenu = (Menu)request.getAttribute ("currentSubMenu");
+%>
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit" />
+<title>沃宝贝</title>
+<link rel="stylesheet" href="<%=basePath%>css/pintuer.css" />
+<link rel="stylesheet" href="<%=basePath%>css/wo.engine.css" />
+<script src="<%=basePath%>js/jquery.js"></script>
+<script src="<%=basePath%>js/jquery.form.min.js"></script>
+<script src="<%=basePath%>js/pintuer.js"></script>
+<script src="<%=basePath%>js/respond.js"></script>
+<script src="<%=basePath%>js/wo.engine.js"></script>
+<script src="<%=basePath%>js/wobb.js"></script>
+<script>
+	WoKit.basePath = '<%=basePath%>';
+	$(document).ready(function() {
+		<%
+		if (null != currentSubMenu) {
+		%>
+		WoAjaxKit.load({
+			domSelector : '#woFrame',
+			url : '<%=basePath%><%=currentSubMenu.getUrl()%>'
+		});
+		<%
+		}
+		%>
+		pintuer();
+		$(document).on('click', WoKit.hideDropMenu);
+	});
+</script>
+<link type="image/x-icon" href="http://www.pintuer.com/favicon.ico"
+	rel="shortcut icon" />
+<link href="http://www.pintuer.com/favicon.ico" rel="bookmark icon" />
+</head>
+
+<body>
+	<div class="lefter">
+		<div class="logo">
+			<a href="<%=basePath%>index" target="_blank"><img
+				src="<%=basePath%>image/logo.png" alt="后台管理系统" /></a>
+		</div>
+	</div>
+	<div class="righter nav-navicon" id="admin-nav">
+		<div class="mainer">
+			<div class="admin-navbar">
+				<span class="float-right">
+					<a class="button button-little bg-yellow" target="_blank" onclick="WoKit.closeWindow(true);">退出</a>
+				</span>
+				<ul class="nav nav-inline admin-nav">
+					<% for (Menu top : topMenus) { %>
+					<li class="<%=top == currentTopMenu ? "active" : ""%>">
+						<a href="<%=basePath%>index?currentTopId=<%=top.getId()%>" class="<%=top.getIcon()%>"> <%=top.getName()%></a>
+						<ul>
+							<%
+								if (top == currentTopMenu) {
+									for (Menu sub : subMenus) {
+							%>
+							<li class="<%=sub == currentSubMenu ? "active" : ""%>">
+								<a href="<%=basePath%>index?currentTopId=<%=top.getId()%>&currentSubId=<%=sub.getId()%>"><span></span><span class="<%=sub.getIcon()%>"> <%=sub.getName()%></span></a>
+							</li>
+							<%
+									}
+								}
+							%>
+						</ul>
+					</li>
+					<% } %>
+				</ul>
+			</div>
+			<div class="admin-bread">
+				<span>你好：欢迎来到千峰学习！</span>
+				<ul class="bread">
+					<li><a class="<%=currentTopMenu.getIcon()%> button button-little" href="<%=basePath%>index?currentTopId=<%=currentTopMenu.getId()%>"> <%=currentTopMenu.getName()%></a></li>
+					<%
+						if (null != currentSubMenu) {
+					%>
+					<li><a class="<%=currentSubMenu.getIcon()%> button button-little" href="<%=basePath%>index?currentTopId=<%=currentTopMenu.getId()%>&currentSubId=<%=currentSubMenu.getId()%>"> <%=currentSubMenu.getName()%></a></li>
+					<%
+						}
+					%>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="admin" id="woFrame">
+	</div>
+ 	<div class="admin woMainFrame"></div> 
+</body>
+</html>

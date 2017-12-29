@@ -1,0 +1,72 @@
+package com.itqf.lvyou.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Resource;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import com.itqf.lvyou.WoException;
+import com.itqf.lvyou.WoResultCode;
+import com.itqf.lvyou.model.Menu;
+import com.itqf.lvyou.model.Role;
+import com.itqf.lvyou.service.MenuService;
+import com.itqf.lvyou.service.RoleService;
+
+@Controller
+@RequestMapping("/sys/role")
+public class RoleController {
+
+	@Resource
+	private RoleService roleService;
+	
+	@Resource
+	private MenuService menuService;
+	
+	private final static Logger LOG = LogManager.getLogger(RoleController.class);
+	
+	@RequestMapping("/list")
+	public ModelAndView getList () {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("role/list");
+		List<Role> roles = roleService.getRoles();
+		mav.addObject("roles", roles);
+		return mav;
+	}
+	
+	@RequestMapping("/loadRelatedMenuList")
+	public ModelAndView loadRelatedMenuList(String roleId) {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("role/relatedMenuList");
+		
+		// 下面这种方式也可以解决懒加载获取不到多对多的list对象
+		Map<String, Object> roleAndMenus = new HashMap<>();
+		roleAndMenus = roleService.getRoleAndMenus(roleId);
+		mav.addAllObjects(roleAndMenus);
+		
+		List<Menu> menus = menuService.getAllMenus();
+		mav.addObject("menus", menus);
+		return mav;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/relatedMenus")
+	public Object relatedMenus(String roleId, String menuIds) {
+		try {
+			String [] menus = menuIds.split(",");
+			roleService.relatedMenus(roleId, menus);
+			return WoResultCode.getSuccess();
+		} catch (WoException e) {
+			LOG.error(e.getMessage(), e);
+			return e.getCode();
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			return WoResultCode.getUnknown().setMsg("关联菜单失败！");
+		}
+	}
+
+}

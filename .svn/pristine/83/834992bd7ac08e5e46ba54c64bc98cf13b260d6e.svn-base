@@ -1,0 +1,29 @@
+package com.itqf.lvyou.dao.impl;
+
+import java.util.List;
+import javax.annotation.Resource;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
+import com.itqf.lvyou.dao.SiteDao;
+import com.itqf.lvyou.model.Site;
+
+@Repository
+public class SiteDaoImpl implements SiteDao {
+
+	@Resource
+	private SessionFactory sessionFactory;
+	
+	@Override
+	public List<Site> getAllSite() {
+		String hql = "from Site s order by s.id";
+		return sessionFactory.getCurrentSession().createQuery(hql,Site.class).getResultList();
+	}
+
+	@Override
+	public List<Site> getSiteBySceneId(String id) {
+		System.out.println(id);
+		String hql = "from Site s where s.scene.id =:id order by s.id";
+		return sessionFactory.getCurrentSession().createQuery(hql,Site.class).setParameter("id", id).getResultList();
+	}
+
+}

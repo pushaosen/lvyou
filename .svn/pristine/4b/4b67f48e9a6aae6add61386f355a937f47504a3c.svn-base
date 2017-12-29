@@ -1,0 +1,27 @@
+package com.itqf.lvyou.dao.impl;
+
+import java.util.List;
+import javax.annotation.Resource;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
+import com.itqf.lvyou.dao.SceneDao;
+import com.itqf.lvyou.model.Scene;
+
+@Repository
+public class SceneDaoImpl implements SceneDao {
+
+	@Resource
+	private SessionFactory sessionFactory;
+	
+	@Override
+	public List<Scene> getAllScene() {
+		String hql = "from Scene s order by s.id";
+		return sessionFactory.getCurrentSession().createQuery(hql,Scene.class).getResultList();
+	}
+
+	@Override
+	public Scene getSceneById(String id) {
+		return sessionFactory.getCurrentSession().get(Scene.class, id);
+	}
+
+}

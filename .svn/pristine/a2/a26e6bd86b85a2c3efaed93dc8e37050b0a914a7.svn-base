@@ -1,0 +1,19 @@
+package com.itqf.lvyou.dao;
+
+import java.util.List;
+import com.itqf.lvyou.model.Guest;
+
+/**
+ * 游客数据访问
+ * @author Administrator
+ *
+ */
+public interface GuestDao {
+
+	/**
+	 * 获取所有游客
+	 * @return
+	 */
+	public abstract List<Guest> getAllGuest();
+
+}

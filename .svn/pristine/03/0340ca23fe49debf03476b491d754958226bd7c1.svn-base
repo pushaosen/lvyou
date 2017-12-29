@@ -1,0 +1,67 @@
+package com.itqf.lvyou.dao;
+
+import java.util.List;
+
+import com.itqf.lvyou.model.Scene;
+
+/**
+ * 景区访问数据接口
+ * @author Administrator
+ *
+ */
+public interface SceneDao {
+
+	/**
+	 * 获取所有景区
+	 * @return
+	 */
+	public abstract List<Scene> getAllScene();
+
+	/**
+	 * 按照id查询景区
+	 * @param string
+	 * @return
+	 */
+	public abstract Scene getSceneById(String id);
+
+	/**
+	 * 创建景区
+	 * @param scene
+	 */
+	public abstract void createScene(Scene scene);
+
+	/**
+	 * 根据景区名称和角色的id实现分页查询
+	 * @param id
+	 * @param name
+	 * @param woPageStart
+	 * @param woPageSize
+	 * @return
+	 */
+	public abstract List<Scene> getSceneByName(String id, String name, Long woPageStart, Long woPageSize);
+
+	/**
+	 * 根据名称和id查询所有
+	 * @param id
+	 * @param name
+	 * @return
+	 */
+	public abstract Long getSceneTotalByName(String id, String name);
+
+	/**
+	 * 根据景区名称查询
+	 * @param name
+	 * @param woPageStart
+	 * @param woPageSize
+	 * @return
+	 */
+	public abstract List<Scene> getSceneByName(String name, Long woPageStart, Long woPageSize);
+
+	/**
+	 * 根据名称查询所有
+	 * @param name
+	 * @return
+	 */
+	public abstract Long getSceneTotalByName(String name);
+
+}

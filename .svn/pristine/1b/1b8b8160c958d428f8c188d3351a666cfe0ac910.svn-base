@@ -1,0 +1,26 @@
+package com.itqf.lvyou.controller;
+
+import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import com.itqf.lvyou.model.TicketType;
+import com.itqf.lvyou.service.TicketTypeService;
+
+@Controller
+@RequestMapping("/ly/tickettype")
+public class TicketTypeController {
+
+	@Resource
+	private TicketTypeService ticketTypeService;
+	
+	@RequestMapping("/list")
+	public ModelAndView getList() {
+		ModelAndView mav = new ModelAndView();
+		List<TicketType> ticketTypes = ticketTypeService.getAllTicketType();
+		mav.setViewName("tickettype/list");
+		mav.addObject("ticketTypes", ticketTypes);
+		return mav;
+	}
+}

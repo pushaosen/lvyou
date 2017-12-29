@@ -1,0 +1,129 @@
+package com.itqf.lvyou.service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import com.itqf.lvyou.WoException;
+import com.itqf.lvyou.WoResultCode;
+import com.itqf.lvyou.dao.MenuDao;
+import com.itqf.lvyou.model.Menu;
+import com.itqf.lvyou.service.MenuService;
+
+/**
+ * 菜单业务逻辑处理接口实现类serviceImpl
+ * @author Administrator
+ *	注意：controller中在service层里要调用的方法最好不要有返回null的情况
+ */
+@Service
+@Transactional
+public class MenuServiceImpl implements MenuService {
+
+	@Resource
+	private MenuDao menuDao;
+	
+	// 使用final修饰，每次使用的时候不用重复再创建，可以提高程序性能
+	private final WoResultCode NO_TOP = new WoResultCode(1000, "没有顶级菜单");
+	// [%s]可以去匹配下面的构造方法中传进来的参数
+	private final WoResultCode NO_MENU = new WoResultCode(1001, "ID位[%s]的菜单为找到");
+	
+	private final WoResultCode CHILD = new WoResultCode(1002, "该菜单下已经有子菜单，无法删除!");
+	
+	@Override
+	public Map<String, Object> getMenuData(String currentTopId, String currentSubId) {
+		List<Menu> topMenus = menuDao.getTopMenus();
+		if (topMenus.size() == 0) {
+			throw new WoException(NO_TOP);
+		}
+		//申明一系列的变量，并给初始值
+		Menu currentTopMenu = null;
+		List<Menu> subMenus = null;
+		Menu currentSubMenu = null;
+		//StringUtils:spring中的方法
+		// 当顶级菜单为空时
+		if(StringUtils.isEmpty(currentTopId)) {
+			currentTopMenu = topMenus.get(0);
+			//获取当前菜单下的所有菜单
+			subMenus = menuDao.getSubMenusByParent(currentTopMenu.getId());
+			if (subMenus.size() > 0) {
+				currentSubMenu = subMenus.get(0);
+			}
+			// 如果子菜单为空的话，就不做任何处理
+		}else {
+			 // 通过currentTopId在菜单中获取currentTopMenu
+			currentTopMenu = this.getMenu(topMenus, currentTopId);
+			if (currentTopMenu == null) {
+				throw new WoException(NO_MENU, currentTopId);
+			}
+			// 通过currentTopMenu中的id获取subMenus
+			subMenus = menuDao.getSubMenusByParent(currentTopMenu.getId());
+			// 通过currentSubId从subMenus中获取currentSubMenu
+			if (subMenus.size() > 0) {
+				if (StringUtils.isEmpty(currentSubId)) {
+					currentSubMenu = subMenus.get(0);
+				}else {
+					currentSubMenu = this.getMenu(subMenus, currentSubId);
+				}
+			}
+		}
+		
+		Map<String,Object> data = new HashMap<String,Object>();
+		data.put("topMenus", topMenus);
+		data.put("currentTopMenu", currentTopMenu);
+		data.put("subMenus", subMenus);
+		data.put("currentSubMenu", currentSubMenu);
+		return data;
+	}
+	
+	private Menu getMenu(List<Menu> menus,String menuId) {
+		for(Menu menu:menus) {
+			if (menuId.equals(menu.getId())) {
+				return menu;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<Menu> getAllMenus() {
+		return menuDao.getAllMenus();
+	}
+
+	@Override
+	public void createMenu(Menu menu) {
+		menuDao.createMenu(menu);
+	}
+
+	@Override
+	public Menu getMenuById(String menuId) {
+		return menuDao.getMenuById(menuId);
+	}
+
+	@Override
+	public List<Menu> getMenusByName(String name) {
+		if (StringUtils.isEmpty(name)) {
+			return menuDao.getAllMenus();
+		}
+		return menuDao.getMenusByName(name);
+	}
+
+	@Override
+	public void updateMenu(Menu menu) {
+		menuDao.updateMenu(menu);
+	}
+
+	@Override
+	public void deletMenu(String menuId) {
+		Menu m = menuDao.getMenuById(menuId);
+		if (m.getChildren() != null && m.getChildren().size() > 0) {
+			throw new WoException(CHILD);
+		}
+		menuDao.deleteMenu(m);
+	}
+}

@@ -1,0 +1,25 @@
+package com.itqf.lvyou.dao.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
+
+import com.itqf.lvyou.dao.AdviceDao;
+import com.itqf.lvyou.model.Advice;
+
+@Repository
+public class AdviceDaoImpl implements AdviceDao {
+
+	@Resource
+	private SessionFactory sessionFactory;
+	
+	@Override
+	public List<Advice> getAllAdvice() {
+		String hql = "from Advice a order by a.id";
+		return sessionFactory.getCurrentSession().createQuery(hql,Advice.class).getResultList();
+	}
+
+}

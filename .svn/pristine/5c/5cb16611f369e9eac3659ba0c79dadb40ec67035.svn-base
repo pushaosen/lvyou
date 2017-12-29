@@ -1,0 +1,73 @@
+package com.itqf.lvyou.dao;
+
+import java.util.List;
+
+import com.itqf.lvyou.model.User;
+
+/**
+ * @author Administrator
+ *
+ */
+public interface UserDao {
+
+	/**
+	 * @param username
+	 * @param password
+	 */
+	public abstract void authenticate(String username,String password);
+
+	/**
+	 * 通过登录名获取用户
+	 * @param user
+	 * @return
+	 */
+	public abstract User getUserByLoginName(String user);
+
+	/**
+	 * 查询全部用户
+	 * @return
+	 */
+	public abstract List<User> getUsers();
+
+	/**
+	 * 创建用户
+	 * @param user
+	 */
+	public abstract void createUser(User user);
+
+	/**
+	 * 按照用户名进行模糊查询用户列表
+	 * @param loginName
+	 * @param woPageSize 
+	 * @param woPageStart 
+	 * @return
+	 */
+	public abstract List<User> getUsersByLoginName(String loginName, Long woPageStart, Long woPageSize);
+
+	/**
+	 * 根据用户ID去查询用户
+	 * @param userId
+	 * @return
+	 */
+	public abstract User getUsersById(String userId);
+
+	/**
+	 * 修改用户
+	 * @param user
+	 */
+	public abstract void updateUser(User user);
+
+	/**
+	 * 删除用户
+	 * @param string
+	 */
+	public abstract void deleteUserById(String userId);
+
+	/**
+	 * 按照用户登录名查询总数量
+	 * @param loginName
+	 * @return
+	 */
+	public abstract Long getUserTotalByLoginName(String loginName);
+	
+}

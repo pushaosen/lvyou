@@ -1,0 +1,85 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ page import="com.itqf.lvyou.model.Advice"%>
+<%@ page import="java.util.List"%>
+
+<div class="panel hidden" id="woTicketRecordSearchPanel">
+	<div class="panel-head" id="woTicketRecordSearchPanelHeader">
+		<span class='icon-times float-right rotate'></span>
+		<h4 class="icon-search">&nbsp;查询</h4>
+	</div>
+	<div class="panel-body padding-small" id="woTicketRecordSearchPanelBody">
+		<form onsubmit="return false;" class="form-inline" id="woTicketRecordSearchForm">
+			<div class="form-group">
+				<div class="label">
+					<label for="employName">&nbsp;&nbsp;&nbsp;&nbsp;员工姓名</label>&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<div class="field">
+					<input type="text" class="input" id="employName" name="employName"
+						maxlength="50" value="" placeholder="" />
+				</div>
+				<div class="label">
+					<label for="phone">&nbsp;&nbsp;&nbsp;&nbsp;电话</label>&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<div class="field">
+					<input type="text" class="input" id="phone" name="phone"
+						maxlength="50" value="" placeholder="" />
+				</div>
+				
+				<div class="label">
+					<label for="idCard">&nbsp;&nbsp;&nbsp;&nbsp;身份证</label>&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<div class="field">
+					<input type="text" class="input" id="idCard" name="idCard"
+						maxlength="50" value="" placeholder="" />
+				</div>
+				
+			</div>
+			<button type="button" class="button button-small bg-main"
+				onclick="Wobb.searchEmployee();">
+				<span class="icon-search text-white">&nbsp;查询</span>
+			</button>
+		</form>
+	</div>
+</div>
+<div class="panel" id="woTicketRecordListPanel">
+	<div class="panel-head" id="woTicketRecordListPanelHeader">
+		<form onsubmit="return false;">
+			<span class='icon-search float-right' id="woTicketRecordListPanelShowSearch" onclick="$('#woTicketRecordSearchPanel').removeClass ('hidden')"></span>
+			<h4>售票记录列表</h4>
+		</form>
+	</div>
+	
+	<div class="panel-body-little woPanelBody">
+		<form method="post" id="woTicketRecordListPanelHeaderForm">
+			<div class="padding-small border-bottom">
+				<input type="button" class="button button-small checkall"
+					name="checkall" value="全选"/>
+				<button type="button"
+					class="button button-small text-white bg-main icon-plus-circle" onclick="Wobb.loadEmployeeCreateForm();">
+					<span>创建</span>
+				</button>
+				<button type="button"
+					class="button button-small text-white bg-main icon-plus-circle" onclick="Wobb.loadEmployeeUpdateForm();">
+					<span>修改</span>
+				</button>
+				<button type="button"
+					class="button button-small text-white bg-yellow icon-minus-circle" onclick="Wobb.deleteEmployees();">
+					<span>删除</span>
+				</button>
+				<button type="button"
+					class="button button-small text-white bg-yellow icon-minus-circle" onclick="Wobb.loadEmployeeImportForm ();">
+					<span>导入</span>
+				</button>
+				<button type="button"
+					class="button button-small text-white bg-yellow icon-minus-circle" onclick="Wobb.exportEmployees();">
+					<span>导出</span>
+				</button>
+			</div>
+			<div id="woTicketRecordListPanelBody">
+				<!-- 点击查询按钮时，下面内容会被替换 -->
+				<jsp:include page="search.jsp"></jsp:include>
+			</div>
+		</form>
+	</div>
+</div>

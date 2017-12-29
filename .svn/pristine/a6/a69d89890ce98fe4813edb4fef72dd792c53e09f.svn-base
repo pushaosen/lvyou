@@ -1,0 +1,30 @@
+package com.itqf.lvyou.service.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+
+import com.itqf.lvyou.dao.RoleDao;
+import com.itqf.lvyou.model.Role;
+import com.itqf.lvyou.service.RoleService;
+
+@Service
+@Transactional
+public class RoleServiceImpl implements RoleService {
+
+	@Resource
+	private RoleDao roleDao;
+	
+	@Override
+	public List<Role> getRoles() {
+		return roleDao.getRoles();
+	}
+
+	@Override
+	public Role getRoleById(String roleId) {
+		return roleDao.getRoleById(roleId);
+	}
+}

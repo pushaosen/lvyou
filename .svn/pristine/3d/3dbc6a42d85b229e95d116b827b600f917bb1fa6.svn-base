@@ -1,0 +1,82 @@
+package com.itqf.lvyou.dao;
+
+import java.util.List;
+
+import com.itqf.lvyou.model.Employee;
+
+/**
+ * Employee访问数据库
+ * @author Administrator
+ *
+ */
+public interface EmployeeDao {
+
+	/**
+	 * 获取所有员工信息
+	 * @return
+	 */
+	public abstract List<Employee> getEmployees();
+
+	/**
+	 * 根据员工ID查询员工信息
+	 * @param employeeId
+	 * @return
+	 */
+	public abstract Employee getEmployeeById(String employeeId);
+
+	/**
+	 * 根据姓名、电话、身份证进行模糊查询
+	 * @param name
+	 * @param idCard 
+	 * @param phone 
+	 * @return
+	 */
+	public abstract List<Employee> getEmployeeList(String name, String phone, String idCard);
+
+	/**
+	 * 删除员工
+	 * @param string
+	 */
+	public abstract void deleteEmploy(Employee e);
+
+	/**
+	 * 创建员工
+	 * @param employee
+	 */
+	public abstract void createEmployee(Employee employee);
+
+	/**
+	 * 按照工号查询员工信息
+	 * @param card
+	 * @return
+	 */
+	public abstract Employee findByCard(String card);
+
+	/**
+	 * 按照电话号查询员工信息
+	 * @param phone
+	 * @return
+	 */
+	public abstract Employee findByPhone(String phone);
+
+	/**
+	 * 按照身份证号查询员工信息
+	 * @param idCard
+	 * @return
+	 */
+	public abstract Employee findIdCard(String idCard);
+
+	/**
+	 * 修改员工信息
+	 * @param employee
+	 */
+	public abstract void updateEmployee(Employee employee);
+
+	/**
+	 * 按照编号查找员工
+	 * @param id
+	 * @return
+	 */
+	public abstract Employee findById(String id);
+
+}

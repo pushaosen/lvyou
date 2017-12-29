@@ -1,0 +1,19 @@
+package com.itqf.lvyou.dao;
+
+import java.util.List;
+import com.itqf.lvyou.model.Scene;
+
+/**
+ * 景区访问数据接口
+ * @author Administrator
+ *
+ */
+public interface SceneDao {
+
+	/**
+	 * 获取所有景区
+	 * @return
+	 */
+	public abstract List<Scene> getAllScene();
+
+}

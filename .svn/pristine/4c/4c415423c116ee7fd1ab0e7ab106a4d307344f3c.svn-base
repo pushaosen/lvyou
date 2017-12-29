@@ -1,0 +1,26 @@
+package com.itqf.lvyou.dao;
+
+import java.util.List;
+import com.itqf.lvyou.model.TicketType;
+
+/**
+ * 售票类型访问数据接口
+ * @author Administrator
+ *
+ */
+public interface TicketTypeDao {
+
+	/**
+	 * 获取所有售票类型
+	 * @return
+	 */
+	public abstract List<TicketType> getAllTicketType();
+
+	/**
+	 * 根据景区id查询景区下面的票类型
+	 * @param id
+	 * @return
+	 */
+	public abstract List<TicketType> getTicketTypeBySceneId(String id);
+
+}

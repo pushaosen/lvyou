@@ -1,0 +1,19 @@
+package com.itqf.lvyou.service;
+
+import java.util.List;
+import com.itqf.lvyou.model.TicketType;
+
+/**
+ * 售票类型service业务逻辑处理
+ * @author Administrator
+ *
+ */
+public interface TicketTypeService {
+
+	/**
+	 * 获取所有投诉建议
+	 * @return
+	 */
+	public abstract List<TicketType> getAllTicketType();
+
+}

@@ -1,0 +1,23 @@
+package com.itqf.lvyou.service.impl;
+
+import java.util.List;
+import javax.annotation.Resource;
+import javax.transaction.Transactional;
+import org.springframework.stereotype.Service;
+import com.itqf.lvyou.dao.TicketRecordDao;
+import com.itqf.lvyou.model.TicketRecord;
+import com.itqf.lvyou.service.TicketRecordService;
+
+@Service
+@Transactional
+public class TicketRecordServiceImpl implements TicketRecordService {
+
+	@Resource
+	private TicketRecordDao ticketRecordDao;
+	
+	@Override
+	public List<TicketRecord> getAllTicketRecord() {
+		return ticketRecordDao.getAllTicketRecord();
+	}
+
+}

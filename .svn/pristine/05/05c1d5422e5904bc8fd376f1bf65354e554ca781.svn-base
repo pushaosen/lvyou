@@ -1,0 +1,36 @@
+package com.itqf.lvyou.service.impl;
+
+import javax.annotation.Resource;
+import javax.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+
+import com.itqf.lvyou.WoException;
+import com.itqf.lvyou.WoResultCode;
+import com.itqf.lvyou.dao.UserDao;
+import com.itqf.lvyou.model.User;
+import com.itqf.lvyou.service.AuthenticationService;
+
+/**
+ * @author Administrator
+ *
+ */
+@Service
+@Transactional
+public class AuthenticationServiceImpl implements AuthenticationService {
+
+	@Resource
+	private UserDao userDao;
+	
+	private final static WoResultCode FAIL = new WoResultCode(2000, "认证失败!");
+	
+	@Override
+	public User authenticate(String user, String password) {
+		User u = userDao.getUserByLoginName(user);
+		if (u == null || !u.getPassword().equals(password)) {
+			throw new WoException(FAIL);
+		}
+		return u;
+	}
+
+}

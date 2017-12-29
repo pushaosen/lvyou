@@ -1,0 +1,23 @@
+package com.itqf.lvyou.service.impl;
+
+import java.util.List;
+import javax.annotation.Resource;
+import javax.transaction.Transactional;
+import org.springframework.stereotype.Service;
+import com.itqf.lvyou.dao.GuestDao;
+import com.itqf.lvyou.model.Guest;
+import com.itqf.lvyou.service.GuestService;
+
+@Service
+@Transactional
+public class GuestServiceImpl implements GuestService {
+
+	@Resource
+	private GuestDao guestDao;
+	
+	@Override
+	public List<Guest> getAllGuest() {
+		return guestDao.getAllGuest();
+	}
+
+}

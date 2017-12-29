@@ -1,0 +1,73 @@
+package com.itqf.lvyou.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Resource;
+import javax.transaction.Transactional;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import com.itqf.lvyou.WoException;
+import com.itqf.lvyou.WoResultCode;
+import com.itqf.lvyou.dao.SceneDao;
+import com.itqf.lvyou.model.PageBean;
+import com.itqf.lvyou.model.Scene;
+import com.itqf.lvyou.service.SceneService;
+
+@Service
+@Transactional
+public class SceneServiceImpl implements SceneService {
+
+	@Resource
+	private SceneDao sceneDao;
+	
+	private final static WoResultCode REPEAT_NAME = new WoResultCode(8000, "[%s]已经存在，导入失败！");
+	
+	@Override
+	public List<Scene> getAllScene() {
+		return sceneDao.getAllScene();
+	}
+
+	@Override
+	public Scene getSceneById(String id) {
+		return sceneDao.getSceneById(id);
+	}
+
+	@Override
+	public void createScene(Scene scene) {
+		if (sceneDao.getSceneById(scene.getName()) != null) {
+			throw new WoException(REPEAT_NAME);
+		}
+		sceneDao.createScene(scene);
+	}
+
+	@Override
+	public PageBean<Scene> getSceneByName(String id, String name, Long woPageStart, Long woPageSize) {
+		PageBean<Scene> pageScene = new PageBean<>();
+		if (StringUtils.isEmpty(name)) {
+			name = "";
+		}
+		if (id == null) {
+			pageScene.setList(sceneDao.getSceneByName(name, woPageStart, woPageSize));
+			pageScene.setTotal(sceneDao.getSceneTotalByName(name));
+		}else {
+			pageScene.setList(sceneDao.getSceneByName(id, name, woPageStart, woPageSize));
+			pageScene.setTotal(sceneDao.getSceneTotalByName(id, name));
+		}
+		return pageScene;
+	}
+
+	@Override
+	public List<Scene> getExportScene(String id, String name, Long woPageStart, Long woPageSize) {
+		if (StringUtils.isEmpty(name)) {
+			name = "";
+		}
+		List<Scene> scenes = new ArrayList<>();
+		if (id == null) {
+			scenes = sceneDao.getSceneByName(name, woPageStart, sceneDao.getSceneTotalByName(name));
+		}else {
+			scenes = sceneDao.getSceneByName(id, name, woPageStart, sceneDao.getSceneTotalByName(id, name));
+		}
+		return scenes;
+	}
+
+}

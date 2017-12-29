@@ -1,0 +1,20 @@
+package com.itqf.lvyou.dao;
+
+import java.util.List;
+
+import com.itqf.lvyou.model.Advice;
+
+/**
+ * 投诉建议实体类
+ * @author Administrator
+ *
+ */
+public interface AdviceDao {
+
+	/**
+	 * 获取所有投诉建议
+	 * @return
+	 */
+	public abstract List<Advice> getAllAdvice();
+
+}

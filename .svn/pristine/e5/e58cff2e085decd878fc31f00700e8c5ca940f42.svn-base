@@ -1,0 +1,44 @@
+package com.itqf.lvyou.dao;
+
+import java.util.List;
+
+import com.itqf.lvyou.model.Role;
+
+/**
+ * 角色role类的dao接口
+ * @author Administrator
+ *
+ */
+public interface RoleDao {
+
+	/**
+	 * 创建角色
+	 * @param role
+	 */
+	public abstract void createRole(Role role);
+	
+	/**
+	 * 通过id查询role
+	 * @param id
+	 * @return
+	 */
+	public abstract Role getRoleById(String id);
+	
+	/**
+	 * 修改角色
+	 * @param role
+	 */
+	public abstract void updateRole(Role role);
+	
+	/**
+	 * 删除角色
+	 * @param role
+	 */
+	public abstract void deleteRole(Role role);
+
+	/**
+	 * 获取所有角色信息
+	 * @return
+	 */
+	public abstract List<Role> getRoles();
+}
